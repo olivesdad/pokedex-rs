@@ -1,6 +1,6 @@
 pub mod api_calls;
 pub mod data_structures;
-use data_structures::pokemon::Pokemon;
+use data_structures::pokemon::PokemonStruct;
 
 #[tokio::main]
 async fn main() {
