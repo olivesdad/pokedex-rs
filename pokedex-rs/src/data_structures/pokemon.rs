@@ -7,6 +7,18 @@ pub struct PokemonStruct {
     pub weight: i32,
     pub is_default: bool,
     pub sprites: Sprites,
+    pub types: Vec<PokemonTypes>,
+}
+
+#[derive(Deserialize, Debug)]
+pub struct PokemonTypes {
+    #[serde(alias = "type")] 
+    pub p_type: PokemonInnerType,
+    pub slot: i32, 
+}
+#[derive(Deserialize, Debug)]
+pub struct PokemonInnerType {
+    pub name: String,
 }
 
 #[derive(Deserialize, Debug)]
@@ -20,4 +32,3 @@ pub struct Sprites {
     pub front_shiny: Option<String>,
     pub front_shiny_female: Option<String>,
 }
-

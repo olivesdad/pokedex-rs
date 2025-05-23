@@ -5,7 +5,7 @@ use data_structures::pokemon::PokemonStruct;
 #[tokio::main]
 async fn main() {
     let poop = api_calls::PokemonIdentifier::IdNumber(12);
-    let pee = api_calls::PokemonIdentifier::PokemonName("pikachu");
+    let pee = api_calls::PokemonIdentifier::PokemonName("baxcalibur");
     let data = api_calls::get_pokemon(pee).await.unwrap();
     println!("{:#?}", data);
 }

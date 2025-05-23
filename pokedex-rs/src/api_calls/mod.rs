@@ -9,21 +9,27 @@ pub enum PokemonIdentifier<'a> {
     PokemonName(&'a str),
 }
 
+impl<'a> PokemonIdentifier<'a> {
+    pub fn get_url(self) -> String {
+        match self {
+            Self::IdNumber(x) => {
+                format!("https://pokeapi.co/api/v2/pokemon/{}", x)
+            }
+            Self::PokemonName(name) => {
+                format!("https://pokeapi.co/api/v2/pokemon/{}", name)
+            }
+        }
+    }
+}
+
 pub async fn get_pokemon<'a>(identifier: PokemonIdentifier<'a>) -> Result<PokemonStruct, ()> {
     match identifier {
-        PokemonIdentifier::IdNumber(id) => {
-            let url = format!("https://pokeapi.co/api/v2/pokemon/{}", id);
-            let resp = get(url).await.unwrap().text().await.unwrap();
-            let data: PokemonStruct = serde_json::from_str(&resp).unwrap();
-            return Ok(data);
-        }
-        PokemonIdentifier::PokemonName(name) => {
-            // Make call to api with name
-            let url = format!("https://pokeapi.co/api/v2/pokemon/{}", name);
+        PokemonIdentifier::IdNumber(_) | PokemonIdentifier::PokemonName(_) => {
+            let url = identifier.get_url();
             let resp = get(url).await.unwrap().text().await.unwrap();
             let data: PokemonStruct = serde_json::from_str(&resp).unwrap();
             return Ok(data);
         }
     }
-   Err(())
+    Err(())
 }
