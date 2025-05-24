@@ -12,13 +12,14 @@ pub struct PokemonStruct {
 
 #[derive(Deserialize, Debug)]
 pub struct PokemonTypes {
-    #[serde(alias = "type")] 
+    #[serde(alias = "type")]
     pub p_type: PokemonInnerType,
-    pub slot: i32, 
+    pub slot: i32,
 }
 #[derive(Deserialize, Debug)]
 pub struct PokemonInnerType {
     pub name: String,
+    pub url: String,
 }
 
 #[derive(Deserialize, Debug)]
