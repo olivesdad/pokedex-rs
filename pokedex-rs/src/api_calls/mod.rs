@@ -1,16 +1,22 @@
-use crate::data_structures::pokemon::PokemonStruct;
-use reqwest::{get, Error};
-
-
-//use crate::data_structures;
+use anyhow::Result;
+use crate::data_structures:: {
+        pokemon::PokemonStruct,
+        pokemon_species::PokemonSpeciesStruct,
+        pokemon_types::PokemonTypeInfo,
+    };
+use reqwest::{get};
 
 pub enum PokemonIdentifier<'a> {
     IdNumber(i32),
     PokemonName(&'a str),
+    PokemonSpecies(&'a str),
+    PokemonType(&'a str),
 }
 
+
+
 impl<'a> PokemonIdentifier<'a> {
-    pub fn get_url(self) -> String {
+    pub fn get_url(&self) -> String {
         match self {
             Self::IdNumber(x) => {
                 format!("https://pokeapi.co/api/v2/pokemon/{}", x)
@@ -18,17 +24,43 @@ impl<'a> PokemonIdentifier<'a> {
             Self::PokemonName(name) => {
                 format!("https://pokeapi.co/api/v2/pokemon/{}", name)
             }
+            Self::PokemonSpecies(name) =>{
+                format!("https://pokeapi.co/api/v2/pokemon-species/{}", name)
+            }
+            Self::PokemonType(name) =>{
+                format!("https://pokeapi.co/api/v2/type/{}", name)
+            }
         }
     }
 }
 
-pub async fn get_pokemon<'a>(identifier: PokemonIdentifier<'a>) -> Result<PokemonStruct, Error> {
+// enums to wrap the different return types from the get_pokemon call
+#[derive(Debug)]
+pub enum PokeReturn {
+    ReturnPokemonStruct(PokemonStruct),
+    ReturnPokemonSpeciesStruct(PokemonSpeciesStruct),
+    ReturnTypeStruct(PokemonTypeInfo),
+}
+
+pub async fn get_pokemon<'a>(identifier: PokemonIdentifier<'a>) -> Result<PokeReturn> {
+    
+    // GEt the url and then get json string
+    let url = &identifier.get_url();
+    let resp = get(url).await?.text().await?;
+    
+    // Deserialize to the proper struct
     match identifier {
         PokemonIdentifier::IdNumber(_) | PokemonIdentifier::PokemonName(_) => {
-            let url = identifier.get_url();
-            let resp = get(url).await?.text().await?;
             let data: PokemonStruct = serde_json::from_str(&resp).unwrap();
-            return Ok(data);
+            return Ok(PokeReturn::ReturnPokemonStruct(data));
+        }
+        PokemonIdentifier::PokemonSpecies(_) =>{
+            // data: PokemonStruct = serde_json::from_str(&resp).unwrap();
+            return Err(anyhow::anyhow!("Not implimented yet"));
+        }
+        PokemonIdentifier::PokemonType(_) =>{
+            let data: PokemonTypeInfo = serde_json::from_str(&resp).unwrap();
+            return Ok(PokeReturn::ReturnTypeStruct(data));
         }
     }
     
