@@ -13,4 +13,19 @@ async fn main() {
 
     let data = api_calls::get_pokemon(peet).await.unwrap();
     println!("{:#?}", data);
+
+   let image = api_calls::get_image("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/998.png").await.unwrap();
+   //println!("{:#?}", image);
+
+    use viuer::{print, Config};
+
+let conf = Config {
+    // Start from row 4 and column 20.
+    x: 50,
+    y: 0,
+    ..Default::default()
+};
+
+//let img = image::DynamicImage::ImageRgba8(image::RgbaImage::new(20, 10));
+print(&image, &conf).expect("Image printing failed.");
 }

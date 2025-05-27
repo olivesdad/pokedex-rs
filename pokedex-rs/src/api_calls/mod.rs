@@ -4,6 +4,7 @@ use crate::data_structures:: {
         pokemon_species::PokemonSpeciesStruct,
         pokemon_types::PokemonTypeInfo,
     };
+use image::{load_from_memory, DynamicImage, ImageError};
 use reqwest::{get};
 
 pub enum PokemonIdentifier<'a> {
@@ -62,6 +63,16 @@ pub async fn get_pokemon<'a>(identifier: PokemonIdentifier<'a>) -> Result<PokeRe
             let data: PokemonTypeInfo = serde_json::from_str(&resp).unwrap();
             return Ok(PokeReturn::ReturnTypeStruct(data));
         }
+    }
+    
+}
+
+pub async fn get_image(url: &str) -> Result<DynamicImage> {
+    let img_bytes = get(url).await?.bytes().await?;
+    if let Ok(x) = load_from_memory(&img_bytes) {
+        return Ok(x);
+    } else {
+        Err(anyhow::anyhow!("failed to get image"))
     }
     
 }
