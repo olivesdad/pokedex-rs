@@ -2,7 +2,7 @@ use crate::data_structures::{
     pokemon::PokemonStruct, pokemon_species::PokemonSpeciesStruct, pokemon_types::PokemonTypeInfo,
 };
 use anyhow::Result;
-use image::{DynamicImage, ImageError, load_from_memory};
+use image::{DynamicImage, load_from_memory};
 use reqwest::get;
 
 pub enum PokemonIdentifier<'a> {
