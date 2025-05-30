@@ -1,22 +1,22 @@
-use api_calls::{PokeReturn, PokemonIdentifier};
-use data_structures::pokemon::PokemonStruct;
+use api_calls::{PokeReturn};
+//use data_structures::pokemon::PokemonStruct;
 
 pub mod api_calls;
 pub mod data_structures;
 
 #[tokio::main]
 async fn main() {
-    let poop = api_calls::PokemonIdentifier::IdNumber(12);
-    let pee = api_calls::PokemonIdentifier::PokemonName("baxcalibur");
-    let peet = api_calls::PokemonIdentifier::PokemonType("ice");
+    //let poop = api_calls::PokemonIdentifier::IdNumber(12);
+    let pee = api_calls::PokemonIdentifier::PokemonName("charizard");
+    //let peet = api_calls::PokemonIdentifier::PokemonType("ice");
     let data = api_calls::get_pokemon(pee).await.unwrap();
-    println!("{:#?}", data);
+   // println!("{:#?}", data);
 
-    let data = api_calls::get_pokemon(peet).await.unwrap();
-    println!("{:#?}", data);
+    // let data = api_calls::get_pokemon(peet).await.unwrap();
+    // println!("{:#?}", data);
 
-    let data = api_calls::get_pokemon(poop).await.unwrap();
-    println!("{:#?}", &data);
+    // let data = api_calls::get_pokemon(poop).await.unwrap();
+    // println!("{:#?}", &data);
 
     if let PokeReturn::ReturnPokemonStruct(ref x) = data {
         if let Ok(image) = api_calls::get_image(
@@ -30,6 +30,10 @@ async fn main() {
                 // Start from row 4 and column 20.
                 x: 50,
                 y: 0,
+               // width: Some(50),
+               // height: Some(20),
+
+               // restore_cursor: true,
                 ..Default::default()
             };
 
@@ -37,6 +41,8 @@ async fn main() {
             print(&image, &conf).expect("Image printing failed.");
         }
     }
+    if let PokeReturn::ReturnPokemonStruct(x) = data {
 
-    println!("{:#?}", data)
+    println!("{}", x)
+    }
 }
