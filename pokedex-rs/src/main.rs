@@ -1,4 +1,5 @@
 use api_calls::{PokeReturn, PokemonIdentifier};
+use data_structures::pokemon::PokemonStruct;
 
 pub mod api_calls;
 pub mod data_structures;
@@ -17,9 +18,9 @@ async fn main() {
     let data = api_calls::get_pokemon(poop).await.unwrap();
     println!("{:#?}", &data);
 
-    if let PokeReturn::ReturnPokemonStruct(x) = data {
+    if let PokeReturn::ReturnPokemonStruct(ref x) = data {
         if let Ok(image) = api_calls::get_image(
-            &x.sprites.front_default.unwrap(), //"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/998.png",
+            &x, //"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/shiny/998.png",
         )
         .await
         {
@@ -36,4 +37,6 @@ async fn main() {
             print(&image, &conf).expect("Image printing failed.");
         }
     }
+
+    println!("{:#?}", data)
 }

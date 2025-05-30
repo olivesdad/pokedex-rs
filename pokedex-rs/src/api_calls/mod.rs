@@ -39,6 +39,7 @@ pub enum PokeReturn {
     ReturnTypeStruct(PokemonTypeInfo),
 }
 
+// hit various apis and deserialize return struct
 pub async fn get_pokemon<'a>(identifier: PokemonIdentifier<'a>) -> Result<PokeReturn> {
     // GEt the url and then get json string
     let url = &identifier.get_url();
@@ -61,11 +62,17 @@ pub async fn get_pokemon<'a>(identifier: PokemonIdentifier<'a>) -> Result<PokeRe
     }
 }
 
-pub async fn get_image(url: &str) -> Result<DynamicImage> {
-    let img_bytes = get(url).await?.bytes().await?;
-    if let Ok(x) = load_from_memory(&img_bytes) {
-        return Ok(x);
-    } else {
+// should return a dynamic image. N
+pub async fn get_image(pokemon_struct:&PokemonStruct) -> Result<DynamicImage> {
+    
+    if let Some(x) = & pokemon_struct.sprites.front_default {
+        let img_bytes = get(x).await?.bytes().await?;
+        let img = load_from_memory(&img_bytes);
+        if img.is_ok() {
+            return Ok(img.unwrap());
+        }
+
+    } 
         Err(anyhow::anyhow!("failed to get image"))
-    }
+    
 }
