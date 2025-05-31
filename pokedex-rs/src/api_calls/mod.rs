@@ -48,7 +48,7 @@ pub async fn get_pokemon<'a>(identifier: PokemonIdentifier<'a>) -> Result<PokeRe
     // Deserialize to the proper struct
     match identifier {
         PokemonIdentifier::IdNumber(_) | PokemonIdentifier::PokemonName(_) => {
-            let data: PokemonStruct = serde_json::from_str(&resp).unwrap();
+            let data: PokemonStruct = serde_json::from_str(&resp)?;
             return Ok(PokeReturn::ReturnPokemonStruct(data));
         }
         PokemonIdentifier::PokemonSpecies(_) => {
@@ -56,7 +56,7 @@ pub async fn get_pokemon<'a>(identifier: PokemonIdentifier<'a>) -> Result<PokeRe
             return Err(anyhow::anyhow!("Not implimented yet"));
         }
         PokemonIdentifier::PokemonType(_) => {
-            let data: PokemonTypeInfo = serde_json::from_str(&resp).unwrap();
+            let data: PokemonTypeInfo = serde_json::from_str(&resp)?;
             return Ok(PokeReturn::ReturnTypeStruct(data));
         }
     }

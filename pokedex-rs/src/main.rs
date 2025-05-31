@@ -6,14 +6,18 @@ pub mod data_structures;
 #[tokio::main]
 async fn main() {
     //let poop = api_calls::PokemonIdentifier::IdNumber(12);
-    let pee = api_calls::PokemonIdentifier::PokemonName("charizard");
+    let pee = api_calls::PokemonIdentifier::PokemonName("bulbasaur");
     //let peet = api_calls::PokemonIdentifier::PokemonType("ice");
-    let data = api_calls::get_pokemon(pee).await.unwrap();
+    let data = api_calls::get_pokemon(pee).await;
     // println!("{:#?}", data);
 
     // let data = api_calls::get_pokemon(peet).await.unwrap();
     // println!("{:#?}", data);
-    report(data).await;
+    if let Ok(x) = data {
+        report(x).await;
+    } else {
+        println!("Failed to locate requested pokemon record")
+    }
 }
 
 // Take a poke return type and print out the report
