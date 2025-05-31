@@ -63,16 +63,13 @@ pub async fn get_pokemon<'a>(identifier: PokemonIdentifier<'a>) -> Result<PokeRe
 }
 
 // should return a dynamic image. N
-pub async fn get_image(pokemon_struct:&PokemonStruct) -> Result<DynamicImage> {
-    
-    if let Some(x) = & pokemon_struct.sprites.front_default {
+pub async fn get_image(pokemon_struct: &PokemonStruct) -> Result<DynamicImage> {
+    if let Some(x) = &pokemon_struct.sprites.front_default {
         let img_bytes = get(x).await?.bytes().await?;
         let img = load_from_memory(&img_bytes);
         if img.is_ok() {
             return Ok(img.unwrap());
         }
-
-    } 
-        Err(anyhow::anyhow!("failed to get image"))
-    
+    }
+    Err(anyhow::anyhow!("failed to get image"))
 }
