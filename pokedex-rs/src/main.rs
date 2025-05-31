@@ -46,7 +46,7 @@ pub async fn report(poke_return: PokeReturn) {
                     // print location for sprite
                     x: x,
                     y: i16::try_from(y).unwrap_or(0),
-                    use_iterm : true,
+                    use_iterm: true,
                     // we only care about how wide it is because terminal can scroll for height and it will scale ok
                     width: Some(u32::try_from(c).unwrap_or(40)),
 

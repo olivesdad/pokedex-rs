@@ -1,6 +1,5 @@
 use core::fmt;
 
-
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
@@ -40,19 +39,15 @@ pub struct Sprites {
 // trait to default print whatever
 impl fmt::Display for PokemonStruct {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-
-        let mut report = format!("\n| Name: {}\n| ID: {}\n| Weight: {}",
-                self.name,
-                self.id,
-                self.weight);
-        for (c,t) in self.types.iter().enumerate() {
-            report.push_str(&format!(
-                "\n| Type{}: {}",
-                c+1,
-                &t.p_type.name));
+        let mut report = format!(
+            "\n| Name: {}\n| ID: {}\n| Weight: {}",
+            self.name, self.id, self.weight
+        );
+        for (c, t) in self.types.iter().enumerate() {
+            report.push_str(&format!("\n| Type{}: {}", c + 1, &t.p_type.name));
         }
         report.push_str("\n\n");
-      
+
         write!(f, "{}", report)
     }
 }
