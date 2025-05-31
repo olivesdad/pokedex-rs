@@ -9,7 +9,7 @@ pub struct PokemonTypeInfo {
 #[derive(Deserialize, Debug)]
 pub struct PokemonType {
     pub name: String,
-    pub url: String
+    pub url: String,
 }
 
 #[derive(Deserialize, Debug)]

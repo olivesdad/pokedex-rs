@@ -6,6 +6,6 @@ pub struct PokemonSpeciesStruct {
     pub name: String,
     pub weight: i32,
     pub is_default: bool,
-   // pub sprites: Sprites,
+    // pub sprites: Sprites,
     //pub types: Vec<PokemonTypes>,
 }

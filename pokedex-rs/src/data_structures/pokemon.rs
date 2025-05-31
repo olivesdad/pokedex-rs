@@ -1,3 +1,5 @@
+use core::fmt;
+
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
@@ -32,4 +34,16 @@ pub struct Sprites {
     pub front_female: Option<String>,
     pub front_shiny: Option<String>,
     pub front_shiny_female: Option<String>,
+}
+
+impl fmt::Display for PokemonStruct {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, 
+            "Name: {}\nID: {}\nWeight: {}\nSPR: {}",
+            self.name,
+            self.id,
+            self.weight,
+            self.sprites.front_default.clone().unwrap_or("none".to_owned())
+        )
+    }
 }
