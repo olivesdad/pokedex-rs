@@ -1,5 +1,6 @@
 use core::fmt;
 
+
 use serde::Deserialize;
 
 #[derive(Deserialize, Debug)]
@@ -36,14 +37,22 @@ pub struct Sprites {
     pub front_shiny_female: Option<String>,
 }
 
+// trait to default print whatever
 impl fmt::Display for PokemonStruct {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, 
-            "Name: {}\nID: {}\nWeight: {}\nSPR: {}",
-            self.name,
-            self.id,
-            self.weight,
-            self.sprites.front_default.clone().unwrap_or("none".to_owned())
-        )
+
+        let mut report = format!("\n| Name: {}\n| ID: {}\n| Weight: {}",
+                self.name,
+                self.id,
+                self.weight);
+        for (c,t) in self.types.iter().enumerate() {
+            report.push_str(&format!(
+                "\n| Type{}: {}",
+                c+1,
+                &t.p_type.name));
+        }
+        report.push_str("\n\n");
+      
+        write!(f, "{}", report)
     }
 }

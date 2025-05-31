@@ -68,6 +68,7 @@ pub async fn get_image(pokemon_struct: &PokemonStruct) -> Result<DynamicImage> {
         let img_bytes = get(x).await?.bytes().await?;
         let img = load_from_memory(&img_bytes);
         if img.is_ok() {
+        
             return Ok(img.unwrap());
         }
     }
