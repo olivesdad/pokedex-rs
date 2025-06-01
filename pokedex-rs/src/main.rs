@@ -2,12 +2,33 @@ use api_calls::PokeReturn;
 use viuer::{Config, print};
 pub mod api_calls;
 pub mod data_structures;
+use clap::Parser;
+
+// stupid parser
+#[derive(Parser, Debug)]
+#[command(name = "pokedex-rs")]
+#[command(version = "1.0")]
+#[command(about = "Pokedex-rs provides human interface to https://pokeapi.co/", long_about = None)]
+struct Args {
+    #[arg(long,short)]
+    pokemon: Option<String>,
+
+}
 
 #[tokio::main]
 async fn main() {
+
+    let args = Args::parse();
     //let poop = api_calls::PokemonIdentifier::IdNumber(12);
-    let pee = api_calls::PokemonIdentifier::PokemonName("sudowoodo");
+    let pee = if let Some(ref x) = args.pokemon {
+        api_calls::PokemonIdentifier::PokemonName(x)
+    } else {
+        api_calls::PokemonIdentifier::PokemonName("squirtle")
+    };
+   // let pee = api_calls::PokemonIdentifier::PokemonName("squirtle");
     //let peet = api_calls::PokemonIdentifier::PokemonType("ice");
+
+    
     let data = api_calls::get_pokemon(pee).await;
     // println!("{:#?}", data);
 
