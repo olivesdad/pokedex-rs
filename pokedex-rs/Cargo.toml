@@ -2,6 +2,7 @@
 name = "pokedex-rs"
 version = "0.1.0"
 edition = "2024"
+description = "Pokedex-rs makes api calls to https://pokeapi.co/ endpoints and prints them in a human friendly manner"
 
 [dependencies]
 anyhow = "1.0.98"

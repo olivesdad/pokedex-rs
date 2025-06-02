@@ -4,36 +4,32 @@ pub mod api_calls;
 pub mod data_structures;
 use clap::Parser;
 
-// stupid parser
+// clap parser bulder thing 
 #[derive(Parser, Debug)]
 #[command(name = "pokedex-rs")]
-#[command(version = "1.0")]
-#[command(about = "Pokedex-rs provides human interface to https://pokeapi.co/", long_about = None)]
+#[command(version)]
+#[command(about , long_about = None)]
 struct Args {
-    #[arg(long,short)]
+    #[arg(long, short)]
     pokemon: Option<String>,
-
 }
 
 #[tokio::main]
 async fn main() {
-
+    // use parser
     let args = Args::parse();
-    //let poop = api_calls::PokemonIdentifier::IdNumber(12);
+
     let pee = if let Some(ref x) = args.pokemon {
         api_calls::PokemonIdentifier::PokemonName(x)
     } else {
         api_calls::PokemonIdentifier::PokemonName("squirtle")
     };
-   // let pee = api_calls::PokemonIdentifier::PokemonName("squirtle");
+
     //let peet = api_calls::PokemonIdentifier::PokemonType("ice");
 
-    
+    // make api call
     let data = api_calls::get_pokemon(pee).await;
-    // println!("{:#?}", data);
 
-    // let data = api_calls::get_pokemon(peet).await.unwrap();
-    // println!("{:#?}", data);
     if let Ok(x) = data {
         report(x).await;
     } else {
