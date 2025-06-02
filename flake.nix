@@ -7,46 +7,31 @@
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs =
-    {
-      self,
-      nixpkgs,
-      rust-overlay,
-      flake-utils,
-      ...
-    }:
-    flake-utils.lib.eachDefaultSystem (
-      system:
+  outputs = { self, nixpkgs, rust-overlay, flake-utils, ... }:
+    flake-utils.lib.eachDefaultSystem (system:
       let
         overlays = [
           (import rust-overlay)
           (self: super: {
-            rust-toolchain = self.rust-bin.fromRustupToolchainFile ./toolchain.toml;
+            rust-toolchain =
+              self.rust-bin.fromRustupToolchainFile ./toolchain.toml;
           })
         ];
-        pkgs = import nixpkgs {
-          inherit system overlays;
-        };
+        pkgs = import nixpkgs { inherit system overlays; };
 
-      in
-      {
-        devShells.default =
-          with pkgs;
+      in {
+        devShells.default = with pkgs;
           mkShell rec {
-            buildInputs = [
-              rust-toolchain
-              rust-bin.beta.latest.default
-            ];
-            packages = with pkgs; [
-              openssl
-              pkg-config
-            ];
+            buildInputs = [ rust-toolchain rust-bin.beta.latest.default ];
+            packages = with pkgs; [ openssl pkg-config ];
             PKG_CONFIG_PATH = "${pkgs.openssl.dev}/lib/pkgconfig";
             shellHook = ''
-              	   export RUST_SRC_PATH="${rust-toolchain}/lib/rustlib/src/rust/library" 
+              export RUST_SRC_PATH="${rust-toolchain}/lib/rustlib/src/rust/library" 
             '';
           };
-        packages.default = pkgs.callPackage ./default.nix{};
-      }
-    );
+        packages = with pkgs; {
+          pokedex-rs = pkgs.callPackage ./default.nix { };
+        };
+        formatter = pkgs.nixfmt;
+      });
 }
