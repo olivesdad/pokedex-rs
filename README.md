@@ -28,3 +28,8 @@ Doesnt really do much just practice with rust + Nix packaging.
 ```
 Then add to packages!
 
+## nix build
+`nix build github:olivesdad/pokedex-rs#pokedex-rs`
+
+## nix run
+`nix run github:olivesdad/pokedex-rs#pokedex-rs -- -p pikachu`
