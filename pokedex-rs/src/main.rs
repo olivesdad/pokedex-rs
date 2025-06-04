@@ -2,32 +2,35 @@ use api_calls::PokeReturn;
 use viuer::{Config, print};
 pub mod api_calls;
 pub mod data_structures;
+pub mod arg_parser;
+use arg_parser::Args;
 use clap::Parser;
+use rand::Rng;
 
-// clap parser bulder thing 
-#[derive(Parser, Debug)]
-#[command(name = "pokedex-rs")]
-#[command(version)]
-#[command(about , long_about = None)]
-struct Args {
-    #[arg(long, short)]
-    pokemon: Option<String>,
-}
+
+
 
 #[tokio::main]
 async fn main() {
     // use parser
     let args = Args::parse();
 
-    let pee = if let Some(ref x) = args.pokemon {
-        api_calls::PokemonIdentifier::PokemonName(x)
-    } else {
-        api_calls::PokemonIdentifier::PokemonName("squirtle")
-    };
+    // Just get the str out of the arg for lookup. it should be a pokemon name or id number
+    // Should probably refactor later if adding new options
+    let mut lookup_val = "1".to_owned();
 
-    //let peet = api_calls::PokemonIdentifier::PokemonType("ice");
-
-    // make api call
+    if let Some(ref x) = args.command {
+    match x {
+        arg_parser::Commands::Pokemon{identifier: pokemon} => {
+            lookup_val = pokemon.clone();
+        }
+        arg_parser::Commands::Random => {
+            let num = rand::rng().random_range(1..=1025);
+            lookup_val = num.to_string();
+        }
+    }
+}
+    let pee = api_calls::PokemonIdentifier::PokemonName(&lookup_val);
     let data = api_calls::get_pokemon(pee).await;
 
     if let Ok(x) = data {
